@@ -37,7 +37,13 @@ cd motel-management-frontend
 npm install
 ```
 
-### 🚀 3. Chạy Dự Án
+### ⚙️ 3. Cấu Hình Environment Variables
+Tạo file `.env` trong thư mục gốc và thêm các biến sau:
+```sh
+VITE_BACKEND_URL=http://localhost:5000 # URL của Backend API
+```
+
+### 🚀 4. Chạy Dự Án
 ```sh
 npm run dev
 ```
