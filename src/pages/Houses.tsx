@@ -14,6 +14,14 @@ const Houses = () => {
     fetchHouses();
   }, []);
 
+  const handleNavigate = (house: House) => {
+    if (house.type === "Thường") {
+      navigate(`/houseDetail/${house._id}`); // Điều hướng đến danh sách phòng
+    } else {
+      navigate(`/houses/${house._id}/beds`); // Điều hướng đến danh sách giường nếu là ký túc xá
+    }
+  };
+
   return (
     <div className="p-5">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">Danh sách nhà trọ</h1>
@@ -23,7 +31,7 @@ const Houses = () => {
           <div
             key={house._id}
             className="relative bg-white p-4 shadow-lg rounded-lg cursor-pointer transition hover:scale-105"
-            onClick={() => navigate(`/houseDetail/${house._id}`)} // Chuyển đến danh sách phòng
+            onClick={() => handleNavigate(house)} // Chuyển đến danh sách phòng hoặc giường
           >
             {/* Nút Thông tin */}
             <button
@@ -38,6 +46,7 @@ const Houses = () => {
 
             <h2 className="text-xl font-semibold">{house.name}</h2>
             <p className="text-gray-600">{house.address}</p>
+            <p className="text-gray-500 text-sm italic">{house.type}</p> {/* Hiển thị loại nhà */}
             <span
               className={`inline-block px-3 py-1 rounded-full text-white mt-2 ${house.status === "Còn phòng" ? "bg-green-500" : "bg-red-500"
                 }`}

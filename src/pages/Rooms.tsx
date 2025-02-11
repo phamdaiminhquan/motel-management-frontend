@@ -18,7 +18,7 @@ const Rooms= () => {
     if (room.type === "Phòng riêng") {
       navigate(`/roomDetail/${room._id}`); // Nếu là phòng riêng, chuyển đến trang RoomDetail
     } else if (room.type === "Phòng giường") {
-      navigate(`/beds/${room._id}`); // Nếu là phòng giường, chuyển đến trang Beds
+      navigate(`/rooms/${room._id}/beds`); // Nếu là phòng giường, chuyển đến trang Beds
     }
   };
 

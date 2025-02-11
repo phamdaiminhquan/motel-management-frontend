@@ -83,27 +83,35 @@ const AddHouse = () => {
       {/* Radio Button Chọn Loại Nhà */}
       <div className="mt-3">
         <p className="font-medium text-gray-700">Loại nhà:</p>
-        <div className="flex space-x-4 mt-1">
-          <label className="flex items-center space-x-2">
+        <div className="flex flex-col space-y-2 mt-1">
+          <label className="flex items-center space-x-3 cursor-pointer">
             <input
               type="radio"
               name="houseType"
               value="Thường"
               checked={formData.houseType === "Thường"}
               onChange={(e) => setFormData({ ...formData, houseType: e.target.value })}
+              className="hidden"
             />
-            <span>Nhà thường</span>
+            <div
+              className={`w-5 h-5 rounded-full border-2 ${formData.houseType === "Thường" ? "bg-blue-500 border-blue-500" : "border-gray-400"}`}
+            ></div>
+            <span className="text-gray-700">Nhà trọ thường</span>
           </label>
 
-          <label className="flex items-center space-x-2">
+          <label className="flex items-center space-x-3 cursor-pointer">
             <input
               type="radio"
               name="houseType"
               value="Ký túc xá"
               checked={formData.houseType === "Ký túc xá"}
               onChange={(e) => setFormData({ ...formData, houseType: e.target.value })}
+              className="hidden"
             />
-            <span>Ký túc xá</span>
+            <div
+              className={`w-5 h-5 rounded-full border-2 ${formData.houseType === "Ký túc xá" ? "bg-blue-500 border-blue-500" : "border-gray-400"}`}
+            ></div>
+            <span className="text-gray-700">Ký túc xá</span>
           </label>
         </div>
       </div>

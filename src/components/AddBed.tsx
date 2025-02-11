@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, AlertTriangle, CheckCircle } from "lucide-react"; // Import icon cảnh báo & thành công
 import { getHouseRooms, House, Room } from "../../services/api"; // API lấy danh sách phòng
+import { addBed, addBedOfHouse, BedInput, BedOfHouseInput } from "../../services/bedService";
 
 interface AddBedProps {
   houses: House[];
@@ -53,26 +54,33 @@ const AddBed: React.FC<AddBedProps> = ({ houses }) => {
     setError(null); // Xóa lỗi nếu dữ liệu hợp lệ
 
     try {
-      const response = await fetch("/api/beds", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          houseId: selectedHouse._id,
-          roomId: selectedRoom?._id || null,
-          bedName,
-        }),
-      });
+      let success = false;
 
-      if (!response.ok) throw new Error("Không thể thêm giường, vui lòng thử lại.");
+      if (selectedHouse.type === "Thường") {
+        // Sử dụng biến trung gian thay vì setState ngay
+        const tempBedInput: BedInput = { name: bedName, status: "Trống", roomId: selectedRoom!._id };
+        success = await addBed(tempBedInput);
+      } else {
+        // Sử dụng biến trung gian cho nhà KTX
+        const tempBedOfHouseInput: BedOfHouseInput = { name: bedName, status: "Trống", houseId: selectedHouse._id };
+        console.log(tempBedOfHouseInput); // Kiểm tra dữ liệu trước khi gửi API
+        success = await addBedOfHouse(tempBedOfHouseInput, selectedHouse._id);
+      }
 
-      console.log("🛏️ Thêm giường thành công");
-      setSuccess("🛏️ Giường đã được thêm thành công!");
-      setBedName(""); // Làm mới form nhập giường
+      if (success) {
+        console.log(`🛏️ ${bedName} Thêm thành công`);
+        setSuccess(`🛏️ ${bedName} được thêm thành công!`);
+        setBedName(""); // Làm mới form nhập giường
+      } else {
+        throw new Error(`Không thể thêm giường ${bedName}, vui lòng thử lại.`);
+      }
     } catch (error) {
-      console.error("❌ Lỗi khi thêm giường:", error);
-      setError("Không thể thêm giường, vui lòng thử lại.");
+      console.error(`❌ Lỗi khi thêm giường ${bedName}:`, error);
+      setError(`Không thể thêm giường ${bedName}, vui lòng thử lại.`);
     }
   };
+
+
 
   return (
     <div>

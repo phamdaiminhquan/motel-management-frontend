@@ -28,15 +28,14 @@ const HouseDetail = () => {
             onClick={() =>
               room.type === "Phòng riêng"
                 ? navigate(`/roomDetail/${room._id}`)
-                : navigate(`/room/${room._id}/beds`)
+                : navigate(`/rooms/${room._id}/beds`)
             }
           >
             <h2 className="text-xl font-semibold">{room.name}</h2>
             <p className="text-gray-600">Loại: {room.type}</p>
             <span
-              className={`inline-block px-3 py-1 rounded-full text-white mt-2 ${
-                room.status === "Trống" ? "bg-green-500" : "bg-red-500"
-              }`}
+              className={`inline-block px-3 py-1 rounded-full text-white mt-2 ${room.status === "Trống" ? "bg-green-500" : "bg-red-500"
+                }`}
             >
               {room.status}
             </span>

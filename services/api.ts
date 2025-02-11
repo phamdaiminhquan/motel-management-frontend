@@ -98,35 +98,3 @@ export const addRoom = async (houseId: string, roomData: RoomInput): Promise<boo
   }
 };
 
-// -------------------- 🛏️ BEDS --------------------
-
-export interface Bed {
-  _id: string;
-  name: string;
-  status: "Trống" | "Đã thuê";
-}
-
-// 🔹 Omit để loại bỏ `_id` khi gửi dữ liệu giường lên backend
-export type BedInput = Omit<Bed, "_id">;
-
-// 🔹 Lấy danh sách giường trong một phòng giường
-export const getRoomBeds = async (roomId: string): Promise<Bed[]> => {
-  try {
-    const response = await API.get<Bed[]>(`/api/rooms/${roomId}/beds`);
-    return response.data;
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách giường:", error);
-    return [];
-  }
-};
-
-// 🔹 Thêm giường vào một phòng giường
-export const addBed = async (roomId: string, bedData: BedInput): Promise<boolean> => {
-  try {
-    const response = await API.post<Bed>(`/api/rooms/${roomId}/beds`, bedData);
-    return response.status === 201;
-  } catch (error) {
-    console.error("Lỗi khi thêm giường:", error);
-    return false;
-  }
-};
