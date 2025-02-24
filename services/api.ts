@@ -86,15 +86,3 @@ export const getHouseRooms = async (houseId: string): Promise<Room[]> => {
     return [];
   }
 };
-
-// 🔹 Thêm phòng vào một nhà trọ
-export const addRoom = async (houseId: string, roomData: RoomInput): Promise<boolean> => {
-  try {
-    const response = await API.post<Room>(`/api/houses/${houseId}/rooms`, roomData);
-    return response.status === 201;
-  } catch (error) {
-    console.error("Lỗi khi thêm phòng:", error);
-    return false;
-  }
-};
-

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowLeft, AlertTriangle, CheckCircle } from "lucide-react"; // Import icon cảnh báo & thành công
+import { addRoom, roomInput } from "../../services/roomService";
 
 interface AddRoomProps {
   houses: { _id: string; name: string }[];
@@ -7,7 +8,7 @@ interface AddRoomProps {
 
 const AddRoom: React.FC<AddRoomProps> = ({ houses }) => {
   const [selectedHouse, setSelectedHouse] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ roomName: "", roomPrice: "" });
+  const [formData, setFormData] = useState({ roomName: "", roomPrice: "", roomType: "Phòng riêng" });
   const [error, setError] = useState<string | null>(null); // Lưu thông báo lỗi
   const [success, setSuccess] = useState<string | null>(null); // Lưu thông báo thành công
 
@@ -28,17 +29,14 @@ const AddRoom: React.FC<AddRoomProps> = ({ houses }) => {
     setError(null); // Xóa lỗi nếu dữ liệu hợp lệ
 
     try {
-      const response = await fetch("/api/rooms", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, houseId: selectedHouse }),
-      });
+      const tempRoomInput: roomInput = { name: formData.roomName, price: Number(formData.roomPrice), type: formData.roomType };
+      const response = await addRoom(tempRoomInput, selectedHouse);
 
-      if (!response.ok) throw new Error("Không thể thêm phòng, vui lòng thử lại.");
+      if (!response) throw new Error("Không thể thêm phòng, vui lòng thử lại.");
 
       console.log("🚪 Thêm phòng thành công");
       setSuccess("🚪 Phòng đã được thêm thành công!");
-      setFormData({ roomName: "", roomPrice: "" }); // Reset form
+      setFormData({ roomName: "", roomPrice: "" , roomType: "Phòng riêng" }); // Reset form
     } catch (error) {
       console.error("❌ Lỗi khi thêm phòng:", error);
       setError("Không thể thêm phòng, vui lòng thử lại.");
@@ -107,6 +105,43 @@ const AddRoom: React.FC<AddRoomProps> = ({ houses }) => {
             value={formData.roomName}
             onChange={(e) => setFormData({ ...formData, roomName: e.target.value })}
           />
+
+          {/* Radio Button Chọn Loại Phòng */}
+          <div className="mt-3">
+            <p className="font-medium text-gray-700">Loại Phòng:</p>
+            <div className="flex flex-col space-y-2 mt-1">
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="roomType"
+                  value="Phòng riêng"
+                  checked={formData.roomType === "Phòng riêng"}
+                  onChange={(e) => setFormData({ ...formData, roomType: e.target.value })}
+                  className="hidden"
+                />
+                <div
+                  className={`w-5 h-5 rounded-full border-2 ${formData.roomType === "Phòng riêng" ? "bg-blue-500 border-blue-500" : "border-gray-400"}`}
+                ></div>
+                <span className="text-gray-700">Phòng riêng</span>
+              </label>
+
+              <label className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="roomType"
+                  value="Phòng giường"
+                  checked={formData.roomType === "Phòng giường"}
+                  onChange={(e) => setFormData({ ...formData, roomType: e.target.value })}
+                  className="hidden"
+                />
+                <div
+                  className={`w-5 h-5 rounded-full border-2 ${formData.roomType === "Phòng giường" ? "bg-blue-500 border-blue-500" : "border-gray-400"}`}
+                ></div>
+                <span className="text-gray-700">Phòng giường</span>
+              </label>
+            </div>
+          </div>
+          {/* Input Giá Phòng */}
           <input
             type="number"
             placeholder="Giá thuê"
